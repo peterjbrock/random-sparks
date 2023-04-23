@@ -21,10 +21,14 @@ To use the Binary Simulator, simply open `index.html` in your web browser. Click
 - `styles.css`: Stylesheet for the Binary Simulator
 - `scripts.js`: JavaScript file that handles the toggling of bits and updating output values
 
-## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## Credits
+
+The RGB Color Picker was created by [ChatGPT 4] using the following resources:
+
+- [W3Schools](https://www.w3schools.com/) for HTML, CSS, and JavaScript tutorials and references
+- [MDN Web Docs](https://developer.mozilla.org/) for additional HTML, CSS, and JavaScript references
 
 ## License
 
-todo
+The RGB Color Picker is licensed under the [MIT License](LICENSE).
