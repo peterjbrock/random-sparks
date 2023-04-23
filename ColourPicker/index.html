@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>RGB Color Picker</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>RGB Color Picker</h1>
+		<div class="color-picker">
+			<table class="slider-table">
+				<tr>
+					<td><label for="red">Red:</label></td>
+					<td><input type="range" id="red" min="0" max="255" value="0"></td>
+					<td><span id="red-value"></span></td>
+					<td><div class="color-patch red"></div></td>
+				</tr>
+				<tr>
+					<td><label for="green">Green:</label></td>
+					<td><input type="range" id="green" min="0" max="255" value="0"></td>
+					<td><span id="green-value"></span></td>
+					<td><div class="color-patch green"></div></td>
+				</tr>
+				<tr>
+					<td><label for="blue">Blue:</label></td>
+					<td><input type="range" id="blue" min="0" max="255" value="0"></td>
+					<td><span id="blue-value"></span></td>
+					<td><div class="color-patch blue"></div></td>
+				</tr>
+			</table>
+
+			<div class="value-container">
+				<label for="red-value">R:</label>
+				<span id="red-value-display">0</span>
+				<label for="green-value">G:</label>
+				<span id="green-value-display">0</span>
+				<label for="blue-value">B:</label>
+				<span id="blue-value-display">0</span>
+				<label for="hex-value">Hex:</label>
+				<input type="text" id="hex-value" value="#000000">
+			</div>
+
+			<div class="color-display"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
