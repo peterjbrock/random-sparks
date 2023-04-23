@@ -17,6 +17,22 @@ document.addEventListener("DOMContentLoaded", function () {
             updateOutputs();
         });
     });
+    // Add this code to set up the event listener for the reset button
+    const resetButton = document.getElementById("resetButton");
+    resetButton.addEventListener("click", function () {
+        // Reset all bit panels to data state 0
+        bitPanels.forEach((bitPanel) => {
+            bitPanel.dataset.state = "0";
+            bitPanel.style.backgroundColor = "black";
+
+            // Update the bit value displayed under the bit panel
+            const bitValue = bitPanel.querySelector(".bit-value");
+            bitValue.textContent = "0";
+        });
+
+        // Update binary, decimal, hexadecimal, and ASCII outputs
+        updateOutputs();
+    });
 });
 
 function updateOutputs() {
