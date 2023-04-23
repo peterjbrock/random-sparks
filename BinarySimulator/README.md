@@ -2,7 +2,7 @@
 
 The 8-bit (byte) Binary Simulator is a simple web application that allows users to toggle individual bits and see their corresponding decimal, hexadecimal, and ASCII values.
 
-![Binary Simulator Screenshot](screenshot.png)
+![Binary Simulator Screenshot](Screenshot-binsim.png)
 
 ## Features
 
