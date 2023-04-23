@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>8-bit (byte) Binary Simulator</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <h1>8-bit (byte) Binary Simulator</h1>
+    <div class="byte">
+        <table>
+            <tr>
+                <th colspan="8">Byte</th>
+            </tr>
+            <tr>
+                <th colspan="4">High nibble</th>
+                <th colspan="4">Low nibble</th>
+            </tr>
+            <tr>
+                <th  style="text-align: left">128 </th>
+                <th style="text-align: left">64 </th>
+                <th style="text-align: left">32 </th>
+                <th style="text-align: left">16 </th>
+                <th>8</th>
+                <th>4</th>
+                <th>2</th>
+                <th>1</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+        
+                    <div class="nibble">
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                    </div>
+                </td>
+                <td colspan="4">
+                <div class="nibble">
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                        <div class="bit-panel" data-state="0"><div class="bit-value">0</div></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="output">
+        <p>Binary: <span id="binaryOutput">0000 0000</span></p>
+        <p>Hexadecimal: <span id="hexOutput">00</span></p>
+        
+        <p>Decimal: <span id="decimalOutput">0</span></p>
+
+        <p>ASCII: <span id="asciiOutput">N/A</span></p>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
