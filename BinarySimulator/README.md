@@ -1,6 +1,6 @@
 # 8-bit (byte) Binary Simulator
 
-The 8-bit (byte) Binary Simulator is a simple web application that allows users to toggle individual bits and see their corresponding decimal, hexadecimal, and ASCII values.
+The 8-bit (byte) [Binary Simulator](index.html) is a simple web application that allows users to toggle individual bits and see their corresponding decimal, hexadecimal, and ASCII values.
 
 ![Binary Simulator Screenshot](Screenshot-binsim.png)
 
@@ -13,7 +13,7 @@ The 8-bit (byte) Binary Simulator is a simple web application that allows users 
 
 ## Usage
 
-To use the Binary Simulator, simply open `index.html` in your web browser. Click on the bit panels to toggle their values between 0 and 1. The output values for binary, decimal, hexadecimal, and ASCII will be updated automatically as you toggle the bits.
+To use the [Binary Simulator](index.html), simply open `index.html` in your web browser. Click on the bit panels to toggle their values between 0 and 1. The output values for binary, decimal, hexadecimal, and ASCII will be updated automatically as you toggle the bits.
 
 ## Files
 
