@@ -11,18 +11,7 @@ body {
 
 .place-value {
     position: absolute;
-    bottom: 45px;
-    left: 0;
-    right: 0;
-    font-size: 18px;
-    font-weight: bold;
-    justify-content: center;
-    text-align: center;
-}
-
-.digit-value {
-    position: absolute;
-    bottom:0px;
+    bottom: 50px;
     left: 0;
     right: 0;
     font-size: 18px;
@@ -30,6 +19,17 @@ body {
     justify-content: center;
     text-align: center;
     color: blue;
+}
+
+.digit-value {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    font-size: 18px;
+    font-weight: bold;
+    justify-content: center;
+    text-align: center;
 }
 .nibble {
     display: flex;
