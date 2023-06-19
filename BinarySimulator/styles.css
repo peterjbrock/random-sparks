@@ -25,6 +25,7 @@ body {
     box-sizing: border-box;
     border: 3px solid #1e00ff; /* Change the border width and color here   border: 1px solid #ccc;*/
     position: relative;
+    justify-content: center;
 }
 .bit-panel[data-state="1"] {
     background-color: white;
@@ -36,6 +37,7 @@ body {
     right: 0;
     font-size: 18px;
     font-weight: bold;
+    justify-content: center;
 }
 .output {
     margin-top: 60px; /* Adjust the value to your preference */
