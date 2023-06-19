@@ -22,12 +22,14 @@ body {
 
 .digit-value {
     position: absolute;
+    bottom:0px;
     left: 0;
     right: 0;
     font-size: 18px;
     font-weight: bold;
     justify-content: center;
     text-align: center;
+    color: blue;
 }
 .nibble {
     display: flex;
