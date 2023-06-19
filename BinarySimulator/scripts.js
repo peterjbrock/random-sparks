@@ -53,4 +53,73 @@ function updateOutputs() {
     document.getElementById("decimalOutput").textContent = decimal;
     document.getElementById("hexOutput").textContent = hex;
     document.getElementById("asciiOutput").textContent = ascii;
-}
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    // ... existing code ...
+
+    // Add this code to set up the event listener for the increment button
+    const incrementButton = document.getElementById("incrementButton");
+    incrementButton.addEventListener("click", function () {
+        // Get the current binary value
+        let binary = "";
+        for (let i = 0; i < bitPanels.length; i++) {
+            binary += bitPanels[i].dataset.state;
+        }
+        binary = binary.replace(/\s/g, "");
+
+        // Increment the binary value by 1
+        let decimal = parseInt(binary, 2);
+        decimal++;
+        if (decimal > 255) decimal = 0;  // Wrap around to 0 if the value exceeds 255
+
+        // Convert the new decimal value back to binary
+        binary = decimal.toString(2).padStart(8, "0");
+
+        // Update the bit panels and bit values
+        for (let i = 0; i < bitPanels.length; i++) {
+            const bitValue = binary[i] === "1" ? "1" : "0";
+            bitPanels[i].dataset.state = bitValue;
+            bitPanels[i].style.backgroundColor = bitValue === "1" ? "white" : "black";
+            bitPanels[i].querySelector(".bit-value").textContent = bitValue;
+        }
+
+        // Update binary, decimal, hexadecimal, and ASCII outputs
+        updateOutputs();
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // ... existing code ...
+
+    // Add this code to set up the event listener for the decrement button
+    const decrementButton = document.getElementById("decrementButton");
+    decrementButton.addEventListener("click", function () {
+        // Get the current binary value
+        let binary = "";
+        for (let i = 0; i < bitPanels.length; i++) {
+            binary += bitPanels[i].dataset.state;
+        }
+        binary = binary.replace(/\s/g, "");
+
+        // Decrement the binary value by 1
+        let decimal = parseInt(binary, 2);
+        decimal--;
+        if (decimal < 0) decimal = 255;  // Wrap around to 255 if the value goes below 0
+
+        // Convert the new decimal value back to binary
+        binary = decimal.toString(2).padStart(8, "0");
+
+        // Update the bit panels and bit values
+        for (let i = 0; i < bitPanels.length; i++) {
+            const bitValue = binary[i] === "1" ? "1" : "0";
+            bitPanels[i].dataset.state = bitValue;
+            bitPanels[i].style.backgroundColor = bitValue === "1" ? "white" : "black";
+            bitPanels[i].querySelector(".bit-value").textContent = bitValue;
+        }
+
+        // Update binary, decimal, hexadecimal, and ASCII outputs
+        updateOutputs();
+    });
+});
+
