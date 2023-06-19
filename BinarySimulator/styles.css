@@ -2,6 +2,9 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
 }
+span {
+    justify-content: center;
+}
 .byte {
     display: flex;
     justify-content: center;
