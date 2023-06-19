@@ -33,10 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update binary, decimal, hexadecimal, and ASCII outputs
         updateOutputs();
     });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // ... existing code ...
 
     // Add this code to set up the event listener for the increment button
     const incrementButton = document.getElementById("incrementButton");
@@ -67,10 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update binary, decimal, hexadecimal, and ASCII outputs
         updateOutputs();
     });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // ... existing code ...
 
     // Add this code to set up the event listener for the decrement button
     const decrementButton = document.getElementById("decrementButton");
