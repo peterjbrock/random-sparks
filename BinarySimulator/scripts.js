@@ -35,26 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function updateOutputs() {
-    const bitPanels = document.querySelectorAll(".bit-panel");
-    let binary = "";
-    for (let i = 0; i < bitPanels.length; i++) {
-        binary += bitPanels[i].dataset.state === "1" ? "1" : "0";
-        if (i === 3) binary += " ";
-    }
-
-    const decimal = parseInt(binary.replace(/\s/g, ""), 2);
-
-    const hex = decimal.toString(16).toUpperCase().padStart(2, "0");
-
-    const ascii = decimal >= 32 && decimal <= 126 ? String.fromCharCode(decimal) : "N/A";
-
-    document.getElementById("binaryOutput").textContent = binary;
-    document.getElementById("decimalOutput").textContent = decimal;
-    document.getElementById("hexOutput").textContent = hex;
-    document.getElementById("asciiOutput").textContent = ascii;
-};
-
 document.addEventListener("DOMContentLoaded", function () {
     // ... existing code ...
 
@@ -123,3 +103,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function updateOutputs() {
+    const bitPanels = document.querySelectorAll(".bit-panel");
+    let binary = "";
+    for (let i = 0; i < bitPanels.length; i++) {
+        binary += bitPanels[i].dataset.state === "1" ? "1" : "0";
+        if (i === 3) binary += " ";
+    }
+
+    const decimal = parseInt(binary.replace(/\s/g, ""), 2);
+
+    const hex = decimal.toString(16).toUpperCase().padStart(2, "0");
+
+    const ascii = decimal >= 32 && decimal <= 126 ? String.fromCharCode(decimal) : "N/A";
+
+    document.getElementById("binaryOutput").textContent = binary;
+    document.getElementById("decimalOutput").textContent = decimal;
+    document.getElementById("hexOutput").textContent = hex;
+    document.getElementById("asciiOutput").textContent = ascii;
+}
