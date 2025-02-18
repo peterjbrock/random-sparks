@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #e0e0e0;
+}
+
+.byte {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.byte-header {
+    background-color: #00ff8861;
+}
+
+.nibble-header-high {
+    color: white;
+    background-color: #002fff;
+}
+
+.nibble-header-low {
+    color: white;
+    background-color: #667ddf;
+}
+
+.place-value {
+    font-size: 14px; /* Other styles as needed, but no centering styles here */
+}
+
+.nibble {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.bit-panel {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    cursor: pointer;
+    border: 3px solid #1e00ff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.bit-panel[data-state="0"] {
+    background-color: black;
+}
+
+.bit-panel[data-state="0"] .bit-value { /* Target .bit-value inside black cards */
+    color: white; /* White text for 0 on black background */
+}
+
+.bit-panel[data-state="1"] {
+    background-color: white;
+}
+
+.bit-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.output {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#resetButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#resetButton:hover {
+    background-color: #45a049;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+    background-color: #0056b3;
+}
