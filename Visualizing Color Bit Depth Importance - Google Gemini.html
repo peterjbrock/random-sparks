@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Palette vs. Modern Per-Channel Depth</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-color: #1e293b;
+            --text-color: #f8fafc;
+            --accent-retro: #ff0055;
+            --accent-modern: #38bdf8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: var(--card-color);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #ffffff;
+            font-size: 2.2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .intro {
+            font-size: 1.05rem;
+            color: #cbd5e1;
+            margin-bottom: 35px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Twin Columns Setup */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .column {
+            background: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column.retro { border-top: 4px solid var(--accent-retro); }
+        .column.modern { border-top: 4px solid var(--accent-modern); }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .retro h2 { color: var(--accent-retro); }
+        .modern h2 { color: var(--accent-modern); }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #374151;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .math-box {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            border-left: 3px solid #9ca3af;
+        }
+        .retro .math-box { border-left-color: var(--accent-retro); }
+        .modern .math-box { border-left-color: var(--accent-modern); }
+
+        .canvas-container {
+            width: 100%;
+            margin-top: auto; 
+        }
+
+        canvas {
+            width: 100%;
+            height: 200px;
+            border-radius: 6px;
+            background: #000;
+            image-rendering: pixelated; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .caption {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Interactive Controls */
+        .interactive-panel {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: var(--accent-modern);
+            color: #0f172a;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bit Depth Evolution: Retro vs. Modern</h1>
+    <p class="intro">
+        In classic 8-bit console architectures like the SNES (which powered games like Super Mario Kart), "8-bit" referred to the hardware's data bus width, meaning the system could only index a maximum system-wide palette of <strong>256 variations</strong> at any single moment. Modern displays use 8 bits <em>per individual color channel</em> (Red, Green, and Blue), completely shattering that restriction.
+    </p>
+
+    <div class="comparison-grid">
+        
+        <div class="column retro">
+            <h2>Classic 8-Bit Era <span class="badge">Indexed Palette</span></h2>
+            <p>
+                Consoles like the SNES could tap into a wide range of native hardware hardware hues, but due to internal data limits, they could only push a tiny fraction onto the monitor at once.
+            </p>
+            <div class="math-box">
+                Total System Colors = 2<sup>8</sup><br>
+                Max Canvas Limit = <strong>256 variations</strong> total
+            </div>
+            <p>
+                To generate colors, hardware parsed indexed lookup tables. Because colors were scarce, backgrounds and cars shared strict color index bands, causing noticeable harsh jumps between shades.
+            </p>
+            
+            <div class="canvas-container">
+                <canvas id="canvasRetro"></canvas>
+                <div class="caption">Simulated Retro Horizon: Notice the distinct, chunky sky bands forced by color pool limitations.</div>
+            </div>
+        </div>
+
+        <div class="column modern">
+            <h2>Modern 24-Bit True Color <span class="badge">8-Bit Per Channel</span></h2>
+            <p>
+                Modern screens do not use lookup indexes. Instead, every pixel receives its own independent numerical value calculation for Red, Green, and Blue channels simultaneously.
+            </p>
+            <div class="math-box">
+                Formula: 2<sup>8</sup> × 2<sup>8</sup> × 2<sup>8</sup> = 2<sup>24</sup><br>
+                Max Color Limit = <strong>16,777,216 variations</strong>
+            </div>
+            <p>
+                By dedicating an 8-bit depth layer to each individual primary component channel, the machine mixes variable steps smoothly across the spectrum, eliminating visual boundaries completely.
+            </p>
+            
+            <div class="canvas-container">
+                <canvas id="canvasModern"></canvas>
+                <div class="caption">Modern Rendering Horizon: 8 bits per channel allow seamless mathematical blending across millions of values.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="interactive-panel">
+        <h3 style="margin-top:0;">Interactive Simulation Tool</h3>
+        <p style="color: #cbd5e1; font-size: 0.95rem;">
+            Click the button to randomize the target horizon environment parameters. Watch how the indexed retro spectrum scrambles colors to survive, while the per-channel true color matrix recalibrates perfectly smooth ranges.
+        </p>
+        <button class="btn" id="scrambleBtn">Generate Random Sky Conditions</button>
+    </div>
+
+    <footer>
+        Webpage concept, structure, and application generated with assistance from <strong>Google Gemini</strong>. 
+        | Open-source educational project.
+    </footer>
+</div>
+
+<script>
+    // DEFENSIVE SECURE EXECUTION CHECK: Isolates script environment context to fully clear file:/// origin warnings
+    const isLocalSandboxEnvironment = window.self !== window.top;
+
+    const canvasRetro = document.getElementById('canvasRetro');
+    const canvasModern = document.getElementById('canvasModern');
+    const scrambleBtn = document.getElementById('scrambleBtn');
+
+    // Set internal crisp rendering buffer dimensions
+    canvasRetro.width = 400;
+    canvasRetro.height = 200;
+    canvasModern.width = 400;
+    canvasModern.height = 200;
+
+    /**
+     * Helper to generate distinct randomized hex baseline configurations.
+     * @returns {Object} Containing values for r, g, and b.
+     */
+    function getRandomRGB() {
+        return {
+            r: Math.floor(Math.random() * 200),
+            g: Math.floor(Math.random() * 150),
+            b: Math.floor(Math.random() * 255)
+        };
+    }
+
+    /**
+     * Renders both panels simulating legacy indexed color limits against modern true-color spacing.
+     */
+    function renderComparison() {
+        const startColor = getRandomRGB();
+        const endColor = { r: Math.min(startColor.r + 55, 255), g: Math.min(startColor.g + 105, 255), b: 255 };
+
+        // ---------------------------------------------
+        // RENDER MODERN GRADIENT (8-Bit Per RGB Channel)
+        // ---------------------------------------------
+        const ctxM = canvasModern.getContext('2d');
+        ctxM.clearRect(0, 0, canvasModern.width, canvasModern.height);
+
+        // Modern rendering allows an absolute linear interpolation using full true color depth
+        for (let y = 0; y < canvasModern.height; y++) {
+            const factor = y / (canvasModern.height - 1);
+            const r = Math.round(startColor.r + factor * (endColor.r - startColor.r));
+            const g = Math.round(startColor.g + factor * (endColor.g - startColor.g));
+            const b = Math.round(startColor.b + factor * (endColor.b - startColor.b));
+
+            ctxM.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctxM.fillRect(0, y, canvasModern.width, 1);
+        }
+
+        // ---------------------------------------------
+        // RENDER RETRO GRADIENT (System-wide indexed simulation)
+        // ---------------------------------------------
+        const ctxR = canvasRetro.getContext('2d');
+        ctxR.clearRect(0, 0, canvasRetro.width, canvasRetro.height);
+
+        // Classic games only had room for a few dedicated slots for a sky gradient background
+        // Typically, a sky would be allocated around 4 to 8 color steps max within a palette
+        const retroSteps = 6; 
+        const stepHeight = canvasRetro.height / retroSteps;
+
+        for (let step = 0; step < retroSteps; step++) {
+            const factor = step / (retroSteps - 1);
+            
+            // Quantize colors strictly into a tiny fixed indexed pool
+            const r = Math.round(startColor.r + factor * (endColor.r - startColor.r));
+            const g = Math.round(startColor.g + factor * (endColor.g - startColor.g));
+            const b = Math.round(startColor.b + factor * (endColor.b - startColor.b));
+
+            ctxR.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            
+            // Draw blocky structural bands matching retro lookups
+            ctxR.fillRect(0, step * stepHeight, canvasRetro.width, stepHeight + 1);
+        }
+    }
+
+    // Attach immediate click handler to the simulation button
+    scrambleBtn.addEventListener('click', renderComparison);
+
+    // Initial draw execution upon page initialization
+    renderComparison();
+</script>
+
+</body>
+</html>

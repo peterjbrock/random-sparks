@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Color Bit Depth Visualizer</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #4a90e2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .intro {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        /* Side-by-Side Layout Breakdown */
+        .workspace {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Left Column: Controls & Info */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .controls-panel {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eef2f3;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #444;
+            font-size: 0.95rem;
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .explanation {
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            background-color: #ecf0f1;
+            font-size: 0.9rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* Right Column: Visualizer Container */
+        .stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Kept strips tightly packed together */
+        }
+
+        .strip-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .strip-meta {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #34495e;
+            text-align: right;
+            background: #eef2f3;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        .strip-meta span {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: normal;
+            color: #7f8c8d;
+        }
+
+        /* Thick individual canvas strips */
+        canvas {
+            width: 100%;
+            height: 50px; /* Compact but thick enough when stacked */
+            border-radius: 4px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            display: block;
+        }
+
+        /* AI Generated Acknowledgment Footer Styling */
+        footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #eef2f3;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+
+        @media (max-width: 850px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Stacked Color Bit Depth Visualizer</h1>
+    <p class="intro">
+        Compare bit depths side-by-side. Observe how doubling the color resolution with each added bit progressively smooths the color gradients and removes banding.
+    </p>
+
+    <div class="workspace">
+        <div class="sidebar">
+            <div class="controls-panel">
+                <label>Select Active RGB Channel</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="channel" value="R" checked> Red Channel</label>
+                    <label><input type="radio" name="channel" value="G"> Green Channel</label>
+                    <label><input type="radio" name="channel" value="B"> Blue Channel</label>
+                </div>
+            </div>
+
+            <div class="explanation">
+                <strong>Teaching Tip:</strong> Highlight how 1-bit starts with just 2 choices (binary 0 or 1). By scaling variants through structural exponential steps (<strong>2<sup>n</sup></strong>), 8-bit resolution reaches <strong>256 variations</strong>, making the color appear seamless to human perception.
+            </div>
+        </div>
+
+        <div class="stack-container">
+            <div id="stackTarget"></div>
+        </div>
+    </div>
+
+    <footer>
+        Webpage concept, structure, and application generated with assistance from <strong>Google Gemini</strong>. 
+        | Open-source educational project.
+    </footer>
+</div>
+
+<script>
+    // DEFENSIVE FRAME CHECK: Prevents leak checking on parent objects within secure file:/// environments
+    const isIsolatedLocalFrame = window.self !== window.top;
+
+    const stackTarget = document.getElementById('stackTarget');
+    const channelRadios = document.querySelectorAll('input[name="channel"]');
+    
+    // Programmatically inject 8 thick canvas layers for a streamlined stack
+    let htmlContent = '';
+    for (let b = 1; b <= 8; b++) {
+        const shades = Math.pow(2, b);
+        htmlContent += `
+            <div class="strip-row">
+                <div class="strip-meta">
+                    ${b}-Bit
+                    <span>(${shades} shades)</span>
+                </div>
+                <canvas id="canvas-bit-${b}" width="1200" height="50"></canvas>
+            </div>
+        `;
+    }
+    stackTarget.innerHTML = htmlContent;
+
+    /**
+     * Identifies the single character code corresponding to the active radio state.
+     * @returns {string} Can be 'R', 'G', or 'B'.
+     */
+    function getSelectedChannel() {
+        let selected = 'R';
+        channelRadios.forEach(radio => {
+            if (radio.checked) selected = radio.value;
+        });
+        return selected;
+    }
+
+    /**
+     * Loops through all generated canvas strips to draw mathematical configurations 
+     * matching increasing powers of 2.
+     */
+    function renderAllGradients() {
+        const channel = getSelectedChannel();
+
+        // Loop through each bit level to paint its respective canvas strip
+        for (let bits = 1; bits <= 8; bits++) {
+            const canvas = document.getElementById(`canvas-bit-${bits}`);
+            const ctx = canvas.getContext('2d');
+            const totalShades = Math.pow(2, bits);
+            const segmentWidth = canvas.width / totalShades;
+
+            // Clear previous paint canvas frames
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Execute quantization block fill loop
+            for (let i = 0; i < totalShades; i++) {
+                // Ensure balanced normalization between extreme points
+                const factor = totalShades > 1 ? i / (totalShades - 1) : 0;
+                const colorValue = Math.round(factor * 255);
+
+                let r = 0, g = 0, b = 0;
+                if (channel === 'R') r = colorValue;
+                if (channel === 'G') g = colorValue;
+                if (channel === 'B') b = colorValue;
+
+                ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                
+                // Draw clean blocks packed next to each other seamlessly
+                ctx.fillRect(i * segmentWidth, 0, segmentWidth + 0.5, canvas.height);
+            }
+        }
+    }
+
+    // Attach immediate reactive rendering to the left controls
+    channelRadios.forEach(radio => radio.addEventListener('change', renderAllGradients));
+
+    // Boot execution initial draw execution
+    renderAllGradients();
+</script>
+
+</body>
+</html>

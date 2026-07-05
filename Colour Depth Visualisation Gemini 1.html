@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Bit Depth Visualizer</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #4a90e2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .intro {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .controls-panel {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eef2f3;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+
+        .bit-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 55px;
+            text-align: right;
+            color: var(--accent-color);
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            background: #f1f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #7f8c8d;
+        }
+
+        .stat-card p {
+            margin: 5px 0 0 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .explanation {
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            background-color: #ecf0f1;
+            font-size: 0.9rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .visualization-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        canvas {
+            width: 100%;
+            height: 320px; 
+            border-radius: 8px;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #eef2f3;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+
+        @media (max-width: 850px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Color Bit Depth Visualizer</h1>
+    <p class="intro">
+        Explore how binary constraints shape digital colors. Use the options on the left to configure the settings.
+    </p>
+
+    <div class="workspace">
+        <div class="sidebar">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label>1. Select RGB Channel</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="channel" value="R" checked> Red</label>
+                        <label><input type="radio" name="channel" value="G"> Green</label>
+                        <label><input type="radio" name="channel" value="B"> Blue</label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="bitDepthRange">2. Bit Depth (1 to 8 bits)</label>
+                    <div class="slider-container">
+                        <input type="range" id="bitDepthRange" min="1" max="8" value="8">
+                        <span class="bit-display" id="bitDisplay">8-bit</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <h3>Binary Formula</h3>
+                    <p id="formulaDisplay">2<sup>8</sup></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Available Shades</h3>
+                    <p id="shadesDisplay">256</p>
+                </div>
+            </div>
+
+            <div class="explanation" id="explanationText">
+                At 8-bit, the channel has 256 individual shades. Transitions look perfectly smooth to the human eye.
+            </div>
+        </div>
+
+        <div class="visualization-box">
+            <label style="margin-bottom: 10px;">Resulting Gradient Strip (0% to 100% Intensity)</label>
+            <canvas id="gradientCanvas"></canvas>
+        </div>
+    </div>
+
+    <footer>
+        Webpage concept, structure, and application generated with assistance from <strong>Google Gemini</strong>. 
+        | Open-source educational project.
+    </footer>
+</div>
+
+<script>
+    // DEFENSIVE FRAME CHECK: Prevents parent/child script leakage on file:/// origins
+    const isFramed = window.self !== window.top;
+    
+    // Global Element Selection Handles
+    const canvas = document.getElementById('gradientCanvas');
+    const ctx = canvas.getContext('2d');
+    const bitSlider = document.getElementById('bitDepthRange');
+    const bitDisplay = document.getElementById('bitDisplay');
+    const formulaDisplay = document.getElementById('formulaDisplay');
+    const shadesDisplay = document.getElementById('shadesDisplay');
+    const explanationText = document.getElementById('explanationText');
+    const channelRadios = document.querySelectorAll('input[name="channel"]');
+
+    // High rendering internal frame resolution configuration
+    canvas.width = 1200;
+    canvas.height = 320; 
+
+    /**
+     * Determines which RGB channel is currently checked.
+     * @returns {string} Single character identifier ('R', 'G', or 'B').
+     */
+    function getSelectedChannel() {
+        let selected = 'R';
+        channelRadios.forEach(radio => {
+            if (radio.checked) selected = radio.value;
+        });
+        return selected;
+    }
+
+    /**
+     * Main execution pipeline. Clears canvas, performs calculations 
+     * based on binary formulas, updates text markers, and renders 
+     * quantized blocks.
+     */
+    function drawGradient() {
+        const bits = parseInt(bitSlider.value);
+        const channel = getSelectedChannel();
+        
+        // Execute math power baseline step evaluation (2^n)
+        const totalShades = Math.pow(2, bits);
+        
+        // Refresh structural UI displays
+        bitDisplay.textContent = `${bits}-bit`;
+        formulaDisplay.innerHTML = `2<sup>${bits}</sup>`;
+        shadesDisplay.textContent = totalShades;
+
+        // Apply updated formatting text strings with strong emphasis highlights
+        if (bits === 1) {
+            explanationText.innerHTML = `<strong>1-bit depth (Binary: 0 or 1):</strong> Only 2 levels are possible. The channel is either completely <strong>OFF (0)</strong> or completely <strong>ON (255)</strong>.`;
+        } else if (bits <= 4) {
+            explanationText.innerHTML = `<strong>${bits}-bit depth:</strong> Offering only ${totalShades} shades. Notice the severe, harsh vertical bands. This is called <strong>posterization</strong>. Formulas calculate variations using the <strong>2<sup>n</sup></strong> baseline structure.`;
+        } else if (bits < 8) {
+            explanationText.innerHTML = `<strong>${bits}-bit depth:</strong> ${totalShades} shades. The gradient is becoming smoother, but look closely—you can still see faint step-like color blocks.`;
+        } else {
+            explanationText.innerHTML = `<strong>8-bit depth (Standard):</strong> Standard imaging channels provide <strong>256 variations</strong>. This provides enough digital granularity that the gradient appears entirely continuous to human vision.`;
+        }
+
+        // Calculate uniform step block sizing based on frame canvas limits
+        const segmentWidth = canvas.width / totalShades;
+
+        // Render loop processing for each distinct quantum block
+        for (let i = 0; i < totalShades; i++) {
+            // Balance color distribution factor spanning exact bounds [0, 255]
+            const factor = totalShades > 1 ? i / (totalShades - 1) : 0;
+            const colorValue = Math.round(factor * 255);
+
+            // Channel separation masking assignment logic
+            let r = 0, g = 0, b = 0;
+            if (channel === 'R') r = colorValue;
+            if (channel === 'G') g = colorValue;
+            if (channel === 'B') b = colorValue;
+
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            
+            // Draw clean adjacent rect blocks packed tightly together
+            ctx.fillRect(i * segmentWidth, 0, segmentWidth + 0.5, canvas.height);
+        }
+    }
+
+    // Attach immediate reactive listeners to hardware/UI input components
+    bitSlider.addEventListener('input', drawGradient);
+    channelRadios.forEach(radio => radio.addEventListener('change', drawGradient));
+
+    // Boot execution initial draw 
+    drawGradient();
+</script>
+
+</body>
+</html>
